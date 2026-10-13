@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Airport Ground Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1>
+                ✈️ Airport Ground Management System
+            </h1>
+
+            <p>
+                Ground Operations Management Dashboard
+            </p>
+
+        </div>
+
+
+        <div class="user-section">
+
+            <span>
+                Welcome, Admin
+            </span>
+
+            <a href="{{ url_for('login') }}"
+               class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+         ===================================================== -->
+
+    <main class="dashboard-container">
+
+
+        <h2>
+            Dashboard
+        </h2>
+
+
+        <p class="dashboard-description">
+
+            Manage airport ground operations efficiently
+            from one place.
+
+        </p>
+
+
+
+        <div class="dashboard-grid">
+
+
+            <!-- =================================================
+                 FLIGHT MANAGEMENT
+                 ================================================= -->
+
+            <a href="{{ url_for('flights') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    ✈️
+                </div>
+
+                <h3>
+                    Flight Management
+                </h3>
+
+                <p>
+
+                    View and manage scheduled flights,
+                    arrival and departure information.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Flight Management →
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 GATE ALLOCATION
+                 ================================================= -->
+
+            <a href="{{ url_for('gate_allocation') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    🚪
+                </div>
+
+                <h3>
+                    Gate Allocation
+                </h3>
+
+                <p>
+
+                    Manage airport gates and assign
+                    gates to flights.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Gate Allocation →
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 GROUND STAFF
+                 ================================================= -->
+
+            <a href="{{ url_for('ground_staff') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    👷
+                </div>
+
+                <h3>
+                    Ground Staff
+                </h3>
+
+                <p>
+
+                    Manage ground staff assignments,
+                    roles and availability.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Ground Staff →
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 BAGGAGE MANAGEMENT
+                 ================================================= -->
+
+            <a href="{{ url_for('baggage') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    🧳
+                </div>
+
+                <h3>
+                    Baggage Management
+                </h3>
+
+                <p>
+
+                    Monitor baggage handling, weight
+                    and processing status.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Baggage Management →
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 FUEL MANAGEMENT
+                 ================================================= -->
+
+            <a href="{{ url_for('fuel_management') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    ⛽
+                </div>
+
+                <h3>
+                    Fuel Management
+                </h3>
+
+                <p>
+
+                    Monitor aircraft fueling operations,
+                    quantity and status.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Fuel Management →
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 REPORTS
+                 ================================================= -->
+
+            <a href="{{ url_for('reports') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Reports
+                </h3>
+
+                <p>
+
+                    View operational information
+                    and management reports.
+
+                </p>
+
+                <span class="card-link">
+
+                    Open Reports →
+
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            Airport Ground Management System
+        </p>
+
+        <p>
+            Software Engineering Project
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Baggage Record</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .form-container {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-container h2 {
+            color: #17365d;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .update-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-btn {
+            background: #64748b;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .cancel-btn:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="dashboard-header">
+
+    <div>
+        <h1>✈️ Airport Ground Management System</h1>
+        <p>Ground Operations Management Dashboard</p>
+    </div>
+
+    <div class="user-section">
+
+        <span>Welcome, Admin</span>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="logout-btn">
+            Dashboard
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="form-container">
+
+    <h2>✏️ Edit Baggage Record</h2>
+
+    <form method="POST">
+
+        <!-- Flight Number -->
+        <div class="form-group">
+
+            <label for="flight_number">
+                Flight Number
+            </label>
+
+            <select
+                name="flight_number"
+                id="flight_number"
+                required>
+
+                {% for flight in flights %}
+
+                    <option
+                        value="{{ flight.flight_number }}"
+                        {% if baggage.flight_number == flight.flight_number %}
+                            selected
+                        {% endif %}>
+
+                        {{ flight.flight_number }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- Baggage Count -->
+        <div class="form-group">
+
+            <label for="baggage_count">
+                Baggage Count
+            </label>
+
+            <input
+                type="number"
+                id="baggage_count"
+                name="baggage_count"
+                min="0"
+                value="{{ baggage.baggage_count }}"
+                required>
+
+        </div>
+
+
+        <!-- Baggage Weight -->
+        <div class="form-group">
+
+            <label for="baggage_weight">
+                Total Baggage Weight (kg)
+            </label>
+
+            <input
+                type="number"
+                id="baggage_weight"
+                name="baggage_weight"
+                min="0"
+                step="0.01"
+                value="{{ baggage.baggage_weight }}"
+                required>
+
+        </div>
+
+
+        <!-- Handling Status -->
+        <div class="form-group">
+
+            <label for="handling_status">
+                Handling Status
+            </label>
+
+            <select
+                name="handling_status"
+                id="handling_status"
+                required>
+
+                <option
+                    value="Pending"
+                    {% if baggage.handling_status == 'Pending' %}
+                        selected
+                    {% endif %}>
+                    Pending
+                </option>
+
+                <option
+                    value="In Progress"
+                    {% if baggage.handling_status == 'In Progress' %}
+                        selected
+                    {% endif %}>
+                    In Progress
+                </option>
+
+                <option
+                    value="Completed"
+                    {% if baggage.handling_status == 'Completed' %}
+                        selected
+                    {% endif %}>
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Handled By -->
+        <div class="form-group">
+
+            <label for="handled_by">
+                Handled By
+            </label>
+
+            <select
+                name="handled_by"
+                id="handled_by">
+
+                <option value="">
+                    -- Select Ground Staff --
+                </option>
+
+                {% for member in staff %}
+
+                    <option
+                        value="{{ member.staff_id }}"
+                        {% if baggage.handled_by == member.staff_id %}
+                            selected
+                        {% endif %}>
+
+                        {{ member.staff_name }}
+                        ({{ member.employee_id }})
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="button-group">
+
+            <button
+                type="submit"
+                class="update-btn">
+
+                Update Baggage
+
+            </button>
+
+
+            <a
+                href="{{ url_for('baggage') }}"
+                class="cancel-btn">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<footer class="dashboard-footer">
+
+    Airport Ground Management System
+    <br>
+
+    Baggage Management Module
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Baggage Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #17365d;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .add-button {
+            margin-top: 22px;
+            background: #17365d;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #24558f;
+        }
+
+        .edit-button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .edit-button:hover {
+            background: #1d4ed8;
+        }
+
+        .delete-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .status-completed {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .status-progress {
+            color: #ca8a04;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="dashboard-header">
+
+    <div>
+
+        <h1>🧳 Baggage Management</h1>
+
+        <p>
+            Airport Baggage Handling Management
+        </p>
+
+    </div>
+
+
+    <div class="user-section">
+
+        <span>Welcome, Admin</span>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="logout-btn">
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<main class="dashboard-container">
+
+
+    <h2>Baggage Management</h2>
+
+    <p class="dashboard-description">
+
+        Manage baggage records, baggage weight and handling operations.
+
+    </p>
+
+
+
+    <!-- ================= ADD BAGGAGE ================= -->
+
+    <div class="form-container">
+
+        <h2>➕ Add Baggage Record</h2>
+
+
+        <form method="POST"
+              action="{{ url_for('baggage') }}">
+
+
+            <div class="form-grid">
+
+
+                <!-- FLIGHT -->
+
+                <div class="form-group">
+
+                    <label for="flight_number">
+                        Flight Number
+                    </label>
+
+                    <select id="flight_number"
+                            name="flight_number"
+                            required>
+
+                        <option value="">
+                            -- Select Flight --
+                        </option>
+
+
+                        {% for flight in flights %}
+
+                        <option value="{{ flight.flight_number }}">
+
+                            {{ flight.flight_number }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- BAGGAGE COUNT -->
+
+                <div class="form-group">
+
+                    <label for="baggage_count">
+                        Baggage Count
+                    </label>
+
+                    <input
+                        type="number"
+                        id="baggage_count"
+                        name="baggage_count"
+                        min="0"
+                        placeholder="Example: 100"
+                        required>
+
+                </div>
+
+
+
+                <!-- BAGGAGE WEIGHT -->
+
+                <div class="form-group">
+
+                    <label for="baggage_weight">
+                        Total Weight (kg)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="baggage_weight"
+                        name="baggage_weight"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 1200.50"
+                        required>
+
+                </div>
+
+
+
+                <!-- HANDLING STATUS -->
+
+                <div class="form-group">
+
+                    <label for="handling_status">
+                        Handling Status
+                    </label>
+
+                    <select
+                        id="handling_status"
+                        name="handling_status"
+                        required>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Completed">
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- HANDLED BY -->
+
+                <div class="form-group">
+
+                    <label for="handled_by">
+                        Handled By
+                    </label>
+
+                    <select
+                        id="handled_by"
+                        name="handled_by">
+
+                        <option value="">
+                            -- Select Staff --
+                        </option>
+
+
+                        {% for member in staff %}
+
+                        <option value="{{ member.staff_id }}">
+
+                            {{ member.staff_name }}
+                            -
+                            {{ member.employee_id }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="add-button">
+
+                + Add Baggage
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- ================= BAGGAGE TABLE ================= -->
+
+    <h2>Baggage Records</h2>
+
+    <p class="dashboard-description">
+
+        View and manage baggage handling records.
+
+    </p>
+
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Baggage ID
+                    </th>
+
+                    <th>
+                        Flight Number
+                    </th>
+
+                    <th>
+                        Baggage Count
+                    </th>
+
+                    <th>
+                        Total Weight
+                    </th>
+
+                    <th>
+                        Handling Status
+                    </th>
+
+                    <th>
+                        Handled By
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for item in baggage %}
+
+                <tr>
+
+
+                    <!-- BAGGAGE ID -->
+
+                    <td>
+                        {{ item.baggage_id }}
+                    </td>
+
+
+
+                    <!-- FLIGHT -->
+
+                    <td>
+                        {{ item.flight_number }}
+                    </td>
+
+
+
+                    <!-- COUNT -->
+
+                    <td>
+                        {{ item.baggage_count }}
+                    </td>
+
+
+
+                    <!-- WEIGHT -->
+
+                    <td>
+                        {{ item.baggage_weight }} kg
+                    </td>
+
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if item.handling_status == "Completed" %}
+
+                            <span class="status-completed">
+                                Completed
+                            </span>
+
+                        {% elif item.handling_status == "In Progress" %}
+
+                            <span class="status-progress">
+                                In Progress
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- STAFF -->
+
+                    <td>
+
+                        {% if item.staff_name %}
+
+                            {{ item.staff_name }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- ACTIONS -->
+
+                    <td>
+
+
+                        <!-- EDIT -->
+
+                        <a
+                            href="{{ url_for(
+                                'edit_baggage',
+                                baggage_id=item.baggage_id
+                            ) }}"
+                            class="edit-button">
+
+                            Edit
+
+                        </a>
+
+
+
+                        <!-- DELETE -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'delete_baggage',
+                                baggage_id=item.baggage_id
+                            ) }}"
+                            style="display: inline;"
+                            onsubmit="return confirm(
+                                'Are you sure you want to delete this baggage record?'
+                            );">
+
+
+                            <button
+                                type="submit"
+                                class="delete-button">
+
+                                Delete
+
+                            </button>
+
+
+                        </form>
+
+
+                    </td>
+
+
+                </tr>
+
+
+                {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty-message">
+
+                        No baggage records found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+
+    <!-- ================= BACK BUTTON ================= -->
+
+    <br>
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="back-button">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+</main>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="dashboard-footer">
+
+    <p>
+        Airport Ground Management System
+    </p>
+
+    <p>
+        Software Engineering Project
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

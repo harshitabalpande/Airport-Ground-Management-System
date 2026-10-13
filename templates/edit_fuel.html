@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Fuel Operation</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .form-container {
+            background: white;
+            width: 90%;
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-container h2 {
+            color: #17365d;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .update-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-btn {
+            background: #64748b;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .cancel-btn:hover {
+            background: #475569;
+        }
+
+        .record-info {
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="dashboard-header">
+
+    <div>
+
+        <h1>
+            ✈️ Airport Ground Management System
+        </h1>
+
+        <p>
+            Ground Operations Management Dashboard
+        </p>
+
+    </div>
+
+
+    <div class="user-section">
+
+        <span>
+            Welcome, Admin
+        </span>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="logout-btn">
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- MAIN FORM -->
+
+<div class="form-container">
+
+    <h2>
+        ✏️ Edit Fuel Operation
+    </h2>
+
+
+    <div class="record-info">
+
+        Editing Fuel Record ID:
+        <strong>{{ fuel.fuel_id }}</strong>
+
+    </div>
+
+
+    <form method="POST">
+
+
+        <!-- Flight Number -->
+
+        <div class="form-group">
+
+            <label for="flight_number">
+                Flight Number
+            </label>
+
+            <select
+                name="flight_number"
+                id="flight_number"
+                required>
+
+                {% for flight in flights %}
+
+                    <option
+                        value="{{ flight.flight_number }}"
+
+                        {% if fuel.flight_number == flight.flight_number %}
+                            selected
+                        {% endif %}>
+
+                        {{ flight.flight_number }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Fuel Type -->
+
+        <div class="form-group">
+
+            <label for="fuel_type">
+                Fuel Type
+            </label>
+
+            <select
+                name="fuel_type"
+                id="fuel_type"
+                required>
+
+                <option
+                    value="Jet A-1"
+                    {% if fuel.fuel_type == 'Jet A-1' %}
+                        selected
+                    {% endif %}>
+
+                    Jet A-1
+
+                </option>
+
+
+                <option
+                    value="Jet A"
+                    {% if fuel.fuel_type == 'Jet A' %}
+                        selected
+                    {% endif %}>
+
+                    Jet A
+
+                </option>
+
+
+                <option
+                    value="Avgas"
+                    {% if fuel.fuel_type == 'Avgas' %}
+                        selected
+                    {% endif %}>
+
+                    Avgas
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Fuel Quantity -->
+
+        <div class="form-group">
+
+            <label for="fuel_quantity">
+                Fuel Quantity (Litres)
+            </label>
+
+            <input
+                type="number"
+                name="fuel_quantity"
+                id="fuel_quantity"
+                min="0"
+                step="0.01"
+                value="{{ fuel.fuel_quantity }}"
+                required>
+
+        </div>
+
+
+
+        <!-- Fueling Time -->
+
+        <div class="form-group">
+
+            <label for="fueling_time">
+                Fueling Time
+            </label>
+
+            <input
+                type="datetime-local"
+                name="fueling_time"
+                id="fueling_time"
+
+                {% if fuel.fueling_time %}
+                    value="{{ fuel.fueling_time.strftime('%Y-%m-%dT%H:%M') }}"
+                {% endif %}>
+
+        </div>
+
+
+
+        <!-- Fuel Status -->
+
+        <div class="form-group">
+
+            <label for="fuel_status">
+                Fuel Status
+            </label>
+
+            <select
+                name="fuel_status"
+                id="fuel_status"
+                required>
+
+
+                <option
+                    value="Pending"
+
+                    {% if fuel.fuel_status == 'Pending' %}
+                        selected
+                    {% endif %}>
+
+                    Pending
+
+                </option>
+
+
+                <option
+                    value="In Progress"
+
+                    {% if fuel.fuel_status == 'In Progress' %}
+                        selected
+                    {% endif %}>
+
+                    In Progress
+
+                </option>
+
+
+                <option
+                    value="Completed"
+
+                    {% if fuel.fuel_status == 'Completed' %}
+                        selected
+                    {% endif %}>
+
+                    Completed
+
+                </option>
+
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Handled By -->
+
+        <div class="form-group">
+
+            <label for="handled_by">
+                Handled By
+            </label>
+
+            <select
+                name="handled_by"
+                id="handled_by">
+
+
+                <option value="">
+                    -- Select Ground Staff --
+                </option>
+
+
+                {% for member in staff %}
+
+                    <option
+                        value="{{ member.staff_id }}"
+
+                        {% if fuel.handled_by == member.staff_id %}
+                            selected
+                        {% endif %}>
+
+                        {{ member.staff_name }}
+                        ({{ member.employee_id }})
+
+                    </option>
+
+                {% endfor %}
+
+
+            </select>
+
+        </div>
+
+
+
+        <!-- BUTTONS -->
+
+        <div class="button-group">
+
+
+            <button
+                type="submit"
+                class="update-btn">
+
+                Update Fuel Operation
+
+            </button>
+
+
+            <a
+                href="{{ url_for('fuel_management') }}"
+                class="cancel-btn">
+
+                Cancel
+
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+<!-- FOOTER -->
+
+<footer class="dashboard-footer">
+
+    Airport Ground Management System
+    <br>
+
+    Fuel Management Module
+
+</footer>
+
+
+</body>
+
+</html>

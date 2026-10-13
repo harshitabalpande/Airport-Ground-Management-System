@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reports - Airport Ground Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* ================= REPORT CARDS ================= */
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .report-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .report-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .report-card h3 {
+            color: #17365d;
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .report-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+
+        /* ================= REPORT SECTIONS ================= */
+
+        .report-section {
+            background: white;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .report-section h3 {
+            color: #17365d;
+            margin-bottom: 18px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .report-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1>
+                📊 Reports
+            </h1>
+
+            <p>
+                Airport Ground Operations Reports
+            </p>
+
+        </div>
+
+
+        <div class="user-section">
+
+            <span>
+                Welcome, Admin
+            </span>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="logout-btn">
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="dashboard-container">
+
+
+        <h2>
+            Operational Reports
+        </h2>
+
+
+        <p class="dashboard-description">
+
+            Overview of airport ground management
+            operations and activities.
+
+        </p>
+
+
+
+        <!-- ================= SUMMARY CARDS ================= -->
+
+        <div class="report-grid">
+
+
+            <!-- TOTAL FLIGHTS -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    ✈️
+                </div>
+
+                <h3>
+                    Total Flights
+                </h3>
+
+                <div class="report-value">
+                    {{ total_flights }}
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL GATES -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    🚪
+                </div>
+
+                <h3>
+                    Total Gates
+                </h3>
+
+                <div class="report-value">
+                    {{ total_gates }}
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL STAFF -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    👷
+                </div>
+
+                <h3>
+                    Ground Staff
+                </h3>
+
+                <div class="report-value">
+                    {{ total_staff }}
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL BAGGAGE -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    🧳
+                </div>
+
+                <h3>
+                    Total Baggage
+                </h3>
+
+                <div class="report-value">
+                    {{ total_baggage }}
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL FUEL -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    ⛽
+                </div>
+
+                <h3>
+                    Total Fuel
+                </h3>
+
+                <div class="report-value">
+                    {{ total_fuel }} L
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIVE ALLOCATIONS -->
+
+            <div class="report-card">
+
+                <div class="report-icon">
+                    🔗
+                </div>
+
+                <h3>
+                    Active Gate Allocations
+                </h3>
+
+                <div class="report-value">
+                    {{ active_allocations }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= FLIGHT STATUS ================= -->
+
+        <div class="report-section">
+
+            <h3>
+                ✈️ Flight Status Summary
+            </h3>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Flight Status
+                            </th>
+
+                            <th>
+                                Number of Flights
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in flight_status %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.status }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2">
+                                No flight status data available.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= BAGGAGE STATUS ================= -->
+
+        <div class="report-section">
+
+            <h3>
+                🧳 Baggage Handling Summary
+            </h3>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Handling Status
+                            </th>
+
+                            <th>
+                                Number of Records
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in baggage_status %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.handling_status }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2">
+                                No baggage status data available.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= FUEL STATUS ================= -->
+
+        <div class="report-section">
+
+            <h3>
+                ⛽ Fuel Operation Summary
+            </h3>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Fuel Status
+                            </th>
+
+                            <th>
+                                Number of Operations
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in fuel_status %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.fuel_status }}
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2">
+                                No fuel status data available.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= BACK BUTTON ================= -->
+
+        <br>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            Airport Ground Management System
+        </p>
+
+        <p>
+            Software Engineering Project
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>
